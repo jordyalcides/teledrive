@@ -1,29 +1,15 @@
 version: "3"
 
 services:
-  webapp:
-    command: bash -c "export NODE_OPTIONS='--openssl-legacy-provider --no-experimental-fetch' && PORT=${WEB_PORT:-3000} yarn web start"
-    ports:
-      - "${WEB_PORT:-3000}:${WEB_PORT:-3000}"
-    build:
-      context: ../.
-      dockerfile: Dockerfile
-      args:
-        REACT_APP_TG_API_ID: ${TG_API_ID}
-        REACT_APP_TG_API_HASH: ${TG_API_HASH}
-    env_file:
-      - .env
-    depends_on:
-      - teledrive
   teledrive:
     command: bash -c "export NODE_OPTIONS='--openssl-legacy-provider --no-experimental-fetch' && yarn api prisma migrate deploy || yarn api prisma migrate resolve --applied "20220420012853_init" && node api/dist/index.js"
     labels:
       traefik.http.routers.server.rule: Host(`teledrive.localhost`)
       traefik.port: 4000
     ports:
-      - "${API_PORT:-4000}:${API_PORT:-4000}"
+      - "${PORT:-4000}:${PORT:-4000}"
     expose:
-      - "${API_PORT:-4000}:${API_PORT:-4000}"
+      - "${PORT:-4000}:${PORT:-4000}"
     build:
       context: ../.
       dockerfile: Dockerfile
