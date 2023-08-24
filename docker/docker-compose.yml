@@ -2,7 +2,7 @@ version: "3"
 
 services:
   webapp:
-    command: bash -c "export NODE_OPTIONS='--openssl-legacy-provider --no-experimental-fetch' && yarn web start"
+    command: bash -c "export NODE_OPTIONS='--openssl-legacy-provider --no-experimental-fetch' && ${WEB_PORT:-3000} yarn web start"
     ports:
       - "${WEB_PORT:-3000}:${WEB_PORT:-3000}"
     build:
